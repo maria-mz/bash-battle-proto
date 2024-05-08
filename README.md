@@ -1,1 +1,1 @@
-# bash-battle-pb
+# bash-battle-proto

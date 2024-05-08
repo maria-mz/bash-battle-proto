@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/maria-mz/bash-battle-pb/bbpb";
+
+// Not a payload by itself, but helps break things down
+message GameConfig {
+    optional int32 maxPlayers = 1;
+    optional int32 rounds = 2;
+    optional int32 roundMinutes = 3;
+}
+
+message CreateGameRequest {
+    optional GameConfig gameConfig = 1;
+    optional string username = 2;
+}
+
+message CreateGameResponse {
+    optional string gameId = 1;
+    optional string gameCode = 2;
+}
