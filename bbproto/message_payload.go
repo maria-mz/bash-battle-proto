@@ -1,7 +1,7 @@
 package bbproto
 
 import (
-	pb "github.com/maria-mz/bash-battle-proto/generated_protobuf"
+	pb "github.com/maria-mz/bash-battle-proto/generated_pb"
 	"google.golang.org/protobuf/proto"
 )
 
