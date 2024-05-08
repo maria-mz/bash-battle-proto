@@ -1,4 +1,4 @@
-module github.com/maria-mz/bash-battle-pb
+module github.com/maria-mz/bash-battle-proto
 
 go 1.22.2
 

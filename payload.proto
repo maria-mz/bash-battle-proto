@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/maria-mz/bash-battle-pb/bbpb";
+option go_package = "github.com/maria-mz/bash-battle-server/bbpb";
 
 // Not a payload by itself, but helps break things down
 message GameConfig {
