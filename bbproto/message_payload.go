@@ -11,72 +11,91 @@ type GameConfig struct {
 	RoundMinutes int32
 }
 
-type CreateGameRequest struct {
-	GameConfig GameConfig
-	Username   string
+type JoinRegistry struct {
+	Username string
 }
 
-type CreateGameResponse struct {
+type CreateGame struct {
+	GameConfig GameConfig
+}
+
+type GameCreated struct {
 	GameId   string
 	GameCode string
 }
 
-func (req CreateGameRequest) Bytes() ([]byte, error) {
-	gameConfigPb := &pb.GameConfig{
-		MaxPlayers:   &req.GameConfig.MaxPlayers,
-		Rounds:       &req.GameConfig.Rounds,
-		RoundMinutes: &req.GameConfig.RoundMinutes,
-	}
+func (msg JoinRegistry) Bytes() ([]byte, error) {
+	pb := &pb.JoinRegistry{Username: &msg.Username}
 
-	reqPb := &pb.CreateGameRequest{
-		GameConfig: gameConfigPb,
-		Username:   &req.Username,
-	}
-
-	b, err := proto.Marshal(reqPb)
+	b, err := proto.Marshal(pb)
 
 	return b, err
 }
 
-func (req *CreateGameRequest) PopulateFromBytes(b []byte) error {
-	reqPb := &pb.CreateGameRequest{}
+func (msg *JoinRegistry) PopulateFromBytes(b []byte) error {
+	pb := &pb.JoinRegistry{}
 
-	if err := proto.Unmarshal(b, reqPb); err != nil {
+	if err := proto.Unmarshal(b, pb); err != nil {
 		return err
 	}
 
-	gameConfig := GameConfig{
-		MaxPlayers:   *reqPb.GameConfig.MaxPlayers,
-		Rounds:       *reqPb.GameConfig.Rounds,
-		RoundMinutes: *reqPb.GameConfig.RoundMinutes,
-	}
-
-	req.GameConfig = gameConfig
-	req.Username = *reqPb.Username
+	msg.Username = *pb.Username
 
 	return nil
 }
 
-func (resp CreateGameResponse) Bytes() ([]byte, error) {
-	reqPb := &pb.CreateGameResponse{
-		GameId:   &resp.GameId,
-		GameCode: &resp.GameCode,
+func (msg CreateGame) Bytes() ([]byte, error) {
+	pb := &pb.CreateGame{
+		GameConfig: &pb.GameConfig{
+			MaxPlayers:   &msg.GameConfig.MaxPlayers,
+			Rounds:       &msg.GameConfig.Rounds,
+			RoundMinutes: &msg.GameConfig.RoundMinutes,
+		},
 	}
 
-	b, err := proto.Marshal(reqPb)
+	b, err := proto.Marshal(pb)
 
 	return b, err
 }
 
-func (resp *CreateGameResponse) PopulateFromBytes(b []byte) error {
-	reqPb := &pb.CreateGameResponse{}
+func (msg *CreateGame) PopulateFromBytes(b []byte) error {
+	pb := &pb.CreateGame{}
 
-	if err := proto.Unmarshal(b, reqPb); err != nil {
+	if err := proto.Unmarshal(b, pb); err != nil {
 		return err
 	}
 
-	resp.GameId = *reqPb.GameId
-	resp.GameCode = *reqPb.GameCode
+	config := GameConfig{
+		MaxPlayers:   *pb.GameConfig.MaxPlayers,
+		Rounds:       *pb.GameConfig.Rounds,
+		RoundMinutes: *pb.GameConfig.RoundMinutes,
+	}
+
+	msg.GameConfig = config
+
+	return nil
+}
+
+func (msg GameCreated) Bytes() ([]byte, error) {
+	pb := &pb.GameCreated{
+		GameId:   &msg.GameId,
+		GameCode: &msg.GameCode,
+	}
+
+	b, err := proto.Marshal(pb)
+
+	return b, err
+}
+
+func (msg *GameCreated) PopulateFromBytes(b []byte) error {
+	pb := &pb.GameCreated{}
+
+	if err := proto.Unmarshal(b, pb); err != nil {
+		return err
+	}
+
+	msg.GameId = *pb.GameId
+	msg.GameCode = *pb.GameCode
 
 	return nil
 }

@@ -22,28 +22,32 @@ func genRandString() string {
 
 func genRandMessageHeader() *MessageHeader {
 	return &MessageHeader{
-		Version:     Version(genRandByte()),
-		Action:      Action(genRandByte()),
-		PayloadType: PayloadType(genRandByte()),
-		StatusCode:  StatusCode(genRandByte()),
-		Token:       NewToken(),
+		Version: Version(genRandByte()),
+		Action:  Action(genRandByte()),
+		Error:   Error(genRandByte()),
+		Token:   NewToken(),
 	}
 }
 
-func genRandCreateGameRequest() *CreateGameRequest {
+func genRandJoinRegistry() *JoinRegistry {
+	return &JoinRegistry{
+		Username: genRandString(),
+	}
+}
+
+func genRandCreateGame() *CreateGame {
 	gameConfig := GameConfig{
 		MaxPlayers:   genRandInt32(),
 		Rounds:       genRandInt32(),
 		RoundMinutes: genRandInt32(),
 	}
-	return &CreateGameRequest{
+	return &CreateGame{
 		GameConfig: gameConfig,
-		Username:   genRandString(),
 	}
 }
 
-func genRandCreateGameResponse() *CreateGameResponse {
-	return &CreateGameResponse{
+func genRandGameCreated() *GameCreated {
+	return &GameCreated{
 		GameId:   genRandString(),
 		GameCode: genRandString(),
 	}

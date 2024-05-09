@@ -37,19 +37,24 @@ func (bt *byteableTest) run(t *testing.T) {
 
 var byteableTests = []byteableTest{
 	{
-		name:      "random message header",
+		name:      "random MessageHeader",
 		byteable1: genRandMessageHeader(),
 		byteable2: &MessageHeader{},
 	},
 	{
-		name:      "random game request",
-		byteable1: genRandCreateGameRequest(),
-		byteable2: &CreateGameRequest{},
+		name:      "random jJoinRegistry",
+		byteable1: genRandJoinRegistry(),
+		byteable2: &JoinRegistry{},
 	},
 	{
-		name:      "random game response",
-		byteable1: genRandCreateGameResponse(),
-		byteable2: &CreateGameResponse{},
+		name:      "random CreateGame",
+		byteable1: genRandCreateGame(),
+		byteable2: &CreateGame{},
+	},
+	{
+		name:      "random GameCreated",
+		byteable1: genRandGameCreated(),
+		byteable2: &GameCreated{},
 	},
 }
 

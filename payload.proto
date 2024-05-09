@@ -9,12 +9,15 @@ message GameConfig {
     optional int32 roundMinutes = 3;
 }
 
-message CreateGameRequest {
-    optional GameConfig gameConfig = 1;
+message JoinRegistry {
     optional string username = 2;
 }
 
-message CreateGameResponse {
+message CreateGame {
+    optional GameConfig gameConfig = 1;
+}
+
+message GameCreated {
     optional string gameId = 1;
     optional string gameCode = 2;
 }
