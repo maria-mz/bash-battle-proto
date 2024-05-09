@@ -82,6 +82,12 @@ func (header *MessageHeader) PopulateFromBytes(b []byte) error {
 	return nil
 }
 
+func NewMessageHeader(b []byte) (*MessageHeader, error) {
+	header := &MessageHeader{}
+	err := header.PopulateFromBytes(b)
+	return header, err
+}
+
 func NewToken() Token {
 	return Token(uuid.New().String())
 }

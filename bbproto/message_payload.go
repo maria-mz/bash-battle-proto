@@ -44,6 +44,12 @@ func (msg *JoinRegistry) PopulateFromBytes(b []byte) error {
 	return nil
 }
 
+func NewJoinRegistry(b []byte) (*JoinRegistry, error) {
+	msg := &JoinRegistry{}
+	err := msg.PopulateFromBytes(b)
+	return msg, err
+}
+
 func (msg CreateGame) Bytes() ([]byte, error) {
 	pb := &pb.CreateGame{
 		GameConfig: &pb.GameConfig{
@@ -76,6 +82,12 @@ func (msg *CreateGame) PopulateFromBytes(b []byte) error {
 	return nil
 }
 
+func NewCreateGame(b []byte) (*CreateGame, error) {
+	msg := &CreateGame{}
+	err := msg.PopulateFromBytes(b)
+	return msg, err
+}
+
 func (msg GameCreated) Bytes() ([]byte, error) {
 	pb := &pb.GameCreated{
 		GameId:   &msg.GameId,
@@ -98,4 +110,10 @@ func (msg *GameCreated) PopulateFromBytes(b []byte) error {
 	msg.GameCode = *pb.GameCode
 
 	return nil
+}
+
+func NewGameCreated(b []byte) (*GameCreated, error) {
+	msg := &GameCreated{}
+	err := msg.PopulateFromBytes(b)
+	return msg, err
 }
