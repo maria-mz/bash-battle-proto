@@ -1,0 +1,20 @@
+// Login RPC Request & Response
+
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+enum LoginStatus {
+    Logged = 0;
+    AlreadyLogged = 1;
+}
+
+message LoginRequest {
+    string name = 1;
+}
+
+message LoginResponse {
+    LoginStatus status = 1;
+}

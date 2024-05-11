@@ -1,0 +1,73 @@
+// StreamGame RPC Stream Messages
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "composable.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+message PlayerJoin {
+    Player player = 1;
+}
+
+message PlayerLeave {
+    Player player = 1;
+}
+
+message PlayerDisconnect {
+    Player player = 1;
+}
+
+message RoundStart {
+    int32 roundNumber = 1;
+    string question = 2;
+    bytes inputFile = 3;
+    bytes outputFile = 4; 
+}
+
+message RoundOver {
+    int32 roundNumber = 1;
+    map<string, PlayerRoundStats> stats = 2; // Player name to stats
+}
+
+message RoundTimeSync {
+    int32 roundNumber = 1;
+    google.protobuf.Timestamp timeLeft = 2;
+}
+
+message RoundReadyRequest {
+    int32 roundNumber = 1;
+}
+
+message GameStatusUpdate {
+    GameStatus status = 1;
+}
+
+message GameDone {
+    map<string, int32> results = 1; // Player name to score
+}
+
+// -- Sent by server
+message GameEvent {
+    oneof event {
+        PlayerJoin PlayerJoin = 1;
+        PlayerLeave playerLeave = 2;
+        PlayerDisconnect playerDisconnect = 3;
+        RoundStart roundStart = 4;
+        RoundOver roundOver = 5;
+        RoundReadyRequest roundReadyRequest = 6;
+        RoundTimeSync roundTimeSync = 7;
+        GameStatusUpdate statusUpdate = 8;
+        GameDone gameDone = 9;
+    } 
+}
+
+// -- Sent by client
+message GameEventAck {
+    oneof ack {
+        bool readyForNextRound = 1;
+    }
+}

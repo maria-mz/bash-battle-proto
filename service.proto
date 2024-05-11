@@ -1,0 +1,23 @@
+// RPC Service definition
+
+syntax = "proto3";
+
+import "composable.proto";
+import "rpc_login.proto";
+import "rpc_create_game.proto";
+import "rpc_get_game_config.proto";
+import "rpc_join_game.proto";
+import "rpc_stream_game.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+service BashBattle {
+    rpc Login (LoginRequest) returns (LoginResponse) {}
+    rpc CreateGame (CreateGameRequest) returns (CreateGameResponse) {}
+    rpc GetGameConfig (ConfigRequest) returns (ConfigResponse) {}
+    rpc JoinGame (JoinGameRequest) returns (JoinGameResponse) {}
+    rpc LeaveGame (EmptyMessage) returns (EmptyMessage) {}
+    rpc StreamGame (stream GameEventAck) returns (stream GameEvent) {}
+}

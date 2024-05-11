@@ -1,0 +1,18 @@
+// CreateGame RPC Request & Response
+
+syntax = "proto3";
+
+import "composable.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+message CreateGameRequest {
+    GameConfig gameConfig = 1;
+}
+
+message CreateGameResponse {
+    string gameId = 1;
+    string gameCode = 2;
+}

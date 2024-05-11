@@ -1,0 +1,36 @@
+// Composable messages
+
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+enum GameStatus {
+    NotStarted = 0;
+    InProgress = 1;
+    Cancelled = 2;
+    Done = 3;
+}
+
+enum GameLookupStatus {
+    GameFound = 0;
+    GameNotFound = 1;
+}
+
+message EmptyMessage {}
+
+message GameConfig {
+    int32 maxPlayers = 1;
+    int32 rounds = 2;
+    int32 roundMinutes = 3;
+}
+
+message Player {
+    int32 name = 1;
+}
+
+message PlayerRoundStats {
+    bool beatRound = 1;
+    optional string command = 2;
+}

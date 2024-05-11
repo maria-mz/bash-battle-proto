@@ -1,0 +1,18 @@
+// GetGameConfig RPC Request & Response
+
+syntax = "proto3";
+
+import "composable.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+message ConfigRequest {
+    string gameId = 1;
+}
+
+message ConfigResponse {
+    GameLookupStatus status = 1;
+    optional GameConfig gameConfig = 2;
+}

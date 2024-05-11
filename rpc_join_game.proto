@@ -1,0 +1,28 @@
+// JoinGame RPC Request & Response
+
+syntax = "proto3";
+
+import "composable.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+
+enum GameJoinStatus {
+    Joined = 0;
+    InvalidCode = 1;
+    GameAlreadyStarted = 2;
+}
+
+message JoinGameRequest {
+    string gameId = 1;
+    string gameCode = 2;
+}
+
+message JoinGameResponse {
+    oneof status {
+        GameLookupStatus lookupStatus = 1;
+        GameJoinStatus joinStatus = 2;
+    }
+    repeated Player currentPlayers = 3;
+}
