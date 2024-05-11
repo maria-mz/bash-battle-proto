@@ -53,7 +53,7 @@ message GameDone {
 // -- Sent by server
 message GameEvent {
     oneof event {
-        PlayerJoin PlayerJoin = 1;
+        PlayerJoin playerJoin = 1;
         PlayerLeave playerLeave = 2;
         PlayerDisconnect playerDisconnect = 3;
         RoundStart roundStart = 4;
