@@ -7,8 +7,8 @@ option go_package = "github.com/maria-mz/bash-battle/proto";
 
 
 enum LoginStatus {
-    Logged = 0;
-    AlreadyLogged = 1;
+    LoginSuccess = 0;
+    NameTaken = 1;
 }
 
 message LoginRequest {
@@ -17,4 +17,5 @@ message LoginRequest {
 
 message LoginResponse {
     LoginStatus status = 1;
+    string token = 2;
 }
