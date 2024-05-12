@@ -2,8 +2,6 @@
 
 syntax = "proto3";
 
-import "composable.proto";
-
 package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
@@ -21,5 +19,4 @@ message JoinGameResponse {
         GAME_LOBBY_CLOSED_ERR = 3;
     }
     ErrorCode errorCode = 1;
-    repeated Player currentPlayers = 2;
 }

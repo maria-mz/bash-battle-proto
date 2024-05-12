@@ -6,7 +6,7 @@ package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
 message LoginRequest {
-    string name = 1;
+    string playerName = 1;
 }
 
 message LoginResponse {

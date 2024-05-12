@@ -21,10 +21,6 @@ message GameConfig {
     int32 roundSeconds = 3;
 }
 
-message Player {
-    int32 name = 1;
-}
-
 message PlayerRoundStats {
     bool beatRound = 1;
     optional string command = 2;

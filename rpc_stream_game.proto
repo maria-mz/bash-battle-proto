@@ -10,15 +10,15 @@ option go_package = "github.com/maria-mz/bash-battle/proto";
 
 
 message PlayerJoin {
-    Player player = 1;
+    string playerName = 1;
 }
 
 message PlayerLeave {
-    Player player = 1;
+    string playerName = 1;
 }
 
 message PlayerDisconnect {
-    Player player = 1;
+    string playerName = 1;
 }
 
 message RoundStart {
