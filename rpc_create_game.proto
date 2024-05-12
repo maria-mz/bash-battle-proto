@@ -13,6 +13,6 @@ message CreateGameRequest {
 }
 
 message CreateGameResponse {
-    string gameId = 1;
+    string gameID = 1;
     string gameCode = 2;
 }

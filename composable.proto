@@ -13,17 +13,12 @@ enum GameStatus {
     Done = 3;
 }
 
-enum GameLookupStatus {
-    GameFound = 0;
-    GameNotFound = 1;
-}
-
 message EmptyMessage {}
 
 message GameConfig {
     int32 maxPlayers = 1;
     int32 rounds = 2;
-    int32 roundMinutes = 3;
+    int32 roundSeconds = 3;
 }
 
 message Player {

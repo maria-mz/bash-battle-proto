@@ -8,21 +8,18 @@ package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
 
-enum GameJoinStatus {
-    Joined = 0;
-    InvalidCode = 1;
-    GameAlreadyStarted = 2;
-}
-
 message JoinGameRequest {
-    string gameId = 1;
+    string gameID = 1;
     string gameCode = 2;
 }
 
 message JoinGameResponse {
-    oneof status {
-        GameLookupStatus lookupStatus = 1;
-        GameJoinStatus joinStatus = 2;
+    enum ErrorCode {
+        UNSPECIFIED_ERR = 0;
+        GAME_NOT_FOUND_ERR = 1;
+        GAME_STARTED_ERR = 2;
+        INVALID_CODE_ERR = 3;
     }
-    repeated Player currentPlayers = 3;
+    ErrorCode errorCode = 1;
+    repeated Player currentPlayers = 2;
 }
