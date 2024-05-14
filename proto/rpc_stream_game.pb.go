@@ -666,74 +666,6 @@ func (*GameEvent_StatusUpdate) isGameEvent_Event() {}
 
 func (*GameEvent_GameDone) isGameEvent_Event() {}
 
-// -- Sent by client
-type GameEventAck struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Ack:
-	//
-	//	*GameEventAck_ReadyForNextRound
-	Ack isGameEventAck_Ack `protobuf_oneof:"ack"`
-}
-
-func (x *GameEventAck) Reset() {
-	*x = GameEventAck{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_stream_game_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *GameEventAck) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GameEventAck) ProtoMessage() {}
-
-func (x *GameEventAck) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_stream_game_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GameEventAck.ProtoReflect.Descriptor instead.
-func (*GameEventAck) Descriptor() ([]byte, []int) {
-	return file_rpc_stream_game_proto_rawDescGZIP(), []int{10}
-}
-
-func (m *GameEventAck) GetAck() isGameEventAck_Ack {
-	if m != nil {
-		return m.Ack
-	}
-	return nil
-}
-
-func (x *GameEventAck) GetReadyForNextRound() bool {
-	if x, ok := x.GetAck().(*GameEventAck_ReadyForNextRound); ok {
-		return x.ReadyForNextRound
-	}
-	return false
-}
-
-type isGameEventAck_Ack interface {
-	isGameEventAck_Ack()
-}
-
-type GameEventAck_ReadyForNextRound struct {
-	ReadyForNextRound bool `protobuf:"varint,1,opt,name=readyForNextRound,proto3,oneof"`
-}
-
-func (*GameEventAck_ReadyForNextRound) isGameEventAck_Ack() {}
-
 var File_rpc_stream_game_proto protoreflect.FileDescriptor
 
 var file_rpc_stream_game_proto_rawDesc = []byte{
@@ -827,15 +759,10 @@ var file_rpc_stream_game_proto_rawDesc = []byte{
 	0x64, 0x61, 0x74, 0x65, 0x12, 0x2d, 0x0a, 0x08, 0x67, 0x61, 0x6d, 0x65, 0x44, 0x6f, 0x6e, 0x65,
 	0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x47,
 	0x61, 0x6d, 0x65, 0x44, 0x6f, 0x6e, 0x65, 0x48, 0x00, 0x52, 0x08, 0x67, 0x61, 0x6d, 0x65, 0x44,
-	0x6f, 0x6e, 0x65, 0x42, 0x07, 0x0a, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x22, 0x45, 0x0a, 0x0c,
-	0x47, 0x61, 0x6d, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x41, 0x63, 0x6b, 0x12, 0x2e, 0x0a, 0x11,
-	0x72, 0x65, 0x61, 0x64, 0x79, 0x46, 0x6f, 0x72, 0x4e, 0x65, 0x78, 0x74, 0x52, 0x6f, 0x75, 0x6e,
-	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x48, 0x00, 0x52, 0x11, 0x72, 0x65, 0x61, 0x64, 0x79,
-	0x46, 0x6f, 0x72, 0x4e, 0x65, 0x78, 0x74, 0x52, 0x6f, 0x75, 0x6e, 0x64, 0x42, 0x05, 0x0a, 0x03,
-	0x61, 0x63, 0x6b, 0x42, 0x27, 0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x6d, 0x61, 0x72, 0x69, 0x61, 0x2d, 0x6d, 0x7a, 0x2f, 0x62, 0x61, 0x73, 0x68, 0x2d,
-	0x62, 0x61, 0x74, 0x74, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x6e, 0x65, 0x42, 0x07, 0x0a, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x42, 0x27, 0x5a, 0x25,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x61, 0x72, 0x69, 0x61,
+	0x2d, 0x6d, 0x7a, 0x2f, 0x62, 0x61, 0x73, 0x68, 0x2d, 0x62, 0x61, 0x74, 0x74, 0x6c, 0x65, 0x2f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -850,7 +777,7 @@ func file_rpc_stream_game_proto_rawDescGZIP() []byte {
 	return file_rpc_stream_game_proto_rawDescData
 }
 
-var file_rpc_stream_game_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_rpc_stream_game_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_rpc_stream_game_proto_goTypes = []interface{}{
 	(*PlayerJoin)(nil),            // 0: proto.PlayerJoin
 	(*PlayerLeave)(nil),           // 1: proto.PlayerLeave
@@ -862,18 +789,17 @@ var file_rpc_stream_game_proto_goTypes = []interface{}{
 	(*GameStatusUpdate)(nil),      // 7: proto.GameStatusUpdate
 	(*GameDone)(nil),              // 8: proto.GameDone
 	(*GameEvent)(nil),             // 9: proto.GameEvent
-	(*GameEventAck)(nil),          // 10: proto.GameEventAck
-	nil,                           // 11: proto.RoundOver.StatsEntry
-	nil,                           // 12: proto.GameDone.ResultsEntry
-	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
-	(GameStatus)(0),               // 14: proto.GameStatus
-	(*PlayerRoundStats)(nil),      // 15: proto.PlayerRoundStats
+	nil,                           // 10: proto.RoundOver.StatsEntry
+	nil,                           // 11: proto.GameDone.ResultsEntry
+	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
+	(GameStatus)(0),               // 13: proto.GameStatus
+	(*PlayerRoundStats)(nil),      // 14: proto.PlayerRoundStats
 }
 var file_rpc_stream_game_proto_depIdxs = []int32{
-	11, // 0: proto.RoundOver.stats:type_name -> proto.RoundOver.StatsEntry
-	13, // 1: proto.RoundTimeSync.timeLeft:type_name -> google.protobuf.Timestamp
-	14, // 2: proto.GameStatusUpdate.status:type_name -> proto.GameStatus
-	12, // 3: proto.GameDone.results:type_name -> proto.GameDone.ResultsEntry
+	10, // 0: proto.RoundOver.stats:type_name -> proto.RoundOver.StatsEntry
+	12, // 1: proto.RoundTimeSync.timeLeft:type_name -> google.protobuf.Timestamp
+	13, // 2: proto.GameStatusUpdate.status:type_name -> proto.GameStatus
+	11, // 3: proto.GameDone.results:type_name -> proto.GameDone.ResultsEntry
 	0,  // 4: proto.GameEvent.playerJoin:type_name -> proto.PlayerJoin
 	1,  // 5: proto.GameEvent.playerLeave:type_name -> proto.PlayerLeave
 	2,  // 6: proto.GameEvent.playerDisconnect:type_name -> proto.PlayerDisconnect
@@ -883,7 +809,7 @@ var file_rpc_stream_game_proto_depIdxs = []int32{
 	5,  // 10: proto.GameEvent.roundTimeSync:type_name -> proto.RoundTimeSync
 	7,  // 11: proto.GameEvent.statusUpdate:type_name -> proto.GameStatusUpdate
 	8,  // 12: proto.GameEvent.gameDone:type_name -> proto.GameDone
-	15, // 13: proto.RoundOver.StatsEntry.value:type_name -> proto.PlayerRoundStats
+	14, // 13: proto.RoundOver.StatsEntry.value:type_name -> proto.PlayerRoundStats
 	14, // [14:14] is the sub-list for method output_type
 	14, // [14:14] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name
@@ -1018,18 +944,6 @@ func file_rpc_stream_game_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_stream_game_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GameEventAck); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
 	}
 	file_rpc_stream_game_proto_msgTypes[9].OneofWrappers = []interface{}{
 		(*GameEvent_PlayerJoin)(nil),
@@ -1042,16 +956,13 @@ func file_rpc_stream_game_proto_init() {
 		(*GameEvent_StatusUpdate)(nil),
 		(*GameEvent_GameDone)(nil),
 	}
-	file_rpc_stream_game_proto_msgTypes[10].OneofWrappers = []interface{}{
-		(*GameEventAck_ReadyForNextRound)(nil),
-	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_rpc_stream_game_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

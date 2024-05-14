@@ -64,10 +64,3 @@ message GameEvent {
         GameDone gameDone = 9;
     } 
 }
-
-// -- Sent by client
-message GameEventAck {
-    oneof ack {
-        bool readyForNextRound = 1;
-    }
-}

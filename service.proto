@@ -19,5 +19,5 @@ service BashBattle {
     rpc GetGameConfig (ConfigRequest) returns (ConfigResponse) {}
     rpc JoinGame (JoinGameRequest) returns (JoinGameResponse) {}
     rpc LeaveGame (EmptyMessage) returns (EmptyMessage) {}
-    rpc StreamGame (stream GameEventAck) returns (stream GameEvent) {}
+    rpc StreamGame (EmptyMessage) returns (stream GameEvent) {}
 }

@@ -27,7 +27,7 @@ type BashBattleClient interface {
 	GetGameConfig(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error)
 	JoinGame(ctx context.Context, in *JoinGameRequest, opts ...grpc.CallOption) (*JoinGameResponse, error)
 	LeaveGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
-	StreamGame(ctx context.Context, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error)
+	StreamGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error)
 }
 
 type bashBattleClient struct {
@@ -83,27 +83,28 @@ func (c *bashBattleClient) LeaveGame(ctx context.Context, in *EmptyMessage, opts
 	return out, nil
 }
 
-func (c *bashBattleClient) StreamGame(ctx context.Context, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error) {
+func (c *bashBattleClient) StreamGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error) {
 	stream, err := c.cc.NewStream(ctx, &BashBattle_ServiceDesc.Streams[0], "/proto.BashBattle/StreamGame", opts...)
 	if err != nil {
 		return nil, err
 	}
 	x := &bashBattleStreamGameClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
 	return x, nil
 }
 
 type BashBattle_StreamGameClient interface {
-	Send(*GameEventAck) error
 	Recv() (*GameEvent, error)
 	grpc.ClientStream
 }
 
 type bashBattleStreamGameClient struct {
 	grpc.ClientStream
-}
-
-func (x *bashBattleStreamGameClient) Send(m *GameEventAck) error {
-	return x.ClientStream.SendMsg(m)
 }
 
 func (x *bashBattleStreamGameClient) Recv() (*GameEvent, error) {
@@ -123,7 +124,7 @@ type BashBattleServer interface {
 	GetGameConfig(context.Context, *ConfigRequest) (*ConfigResponse, error)
 	JoinGame(context.Context, *JoinGameRequest) (*JoinGameResponse, error)
 	LeaveGame(context.Context, *EmptyMessage) (*EmptyMessage, error)
-	StreamGame(BashBattle_StreamGameServer) error
+	StreamGame(*EmptyMessage, BashBattle_StreamGameServer) error
 	mustEmbedUnimplementedBashBattleServer()
 }
 
@@ -146,7 +147,7 @@ func (UnimplementedBashBattleServer) JoinGame(context.Context, *JoinGameRequest)
 func (UnimplementedBashBattleServer) LeaveGame(context.Context, *EmptyMessage) (*EmptyMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LeaveGame not implemented")
 }
-func (UnimplementedBashBattleServer) StreamGame(BashBattle_StreamGameServer) error {
+func (UnimplementedBashBattleServer) StreamGame(*EmptyMessage, BashBattle_StreamGameServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamGame not implemented")
 }
 func (UnimplementedBashBattleServer) mustEmbedUnimplementedBashBattleServer() {}
@@ -253,12 +254,15 @@ func _BashBattle_LeaveGame_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _BashBattle_StreamGame_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(BashBattleServer).StreamGame(&bashBattleStreamGameServer{stream})
+	m := new(EmptyMessage)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(BashBattleServer).StreamGame(m, &bashBattleStreamGameServer{stream})
 }
 
 type BashBattle_StreamGameServer interface {
 	Send(*GameEvent) error
-	Recv() (*GameEventAck, error)
 	grpc.ServerStream
 }
 
@@ -268,14 +272,6 @@ type bashBattleStreamGameServer struct {
 
 func (x *bashBattleStreamGameServer) Send(m *GameEvent) error {
 	return x.ServerStream.SendMsg(m)
-}
-
-func (x *bashBattleStreamGameServer) Recv() (*GameEventAck, error) {
-	m := new(GameEventAck)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
 }
 
 // BashBattle_ServiceDesc is the grpc.ServiceDesc for BashBattle service.
@@ -311,7 +307,6 @@ var BashBattle_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "StreamGame",
 			Handler:       _BashBattle_StreamGame_Handler,
 			ServerStreams: true,
-			ClientStreams: true,
 		},
 	},
 	Metadata: "service.proto",
