@@ -14,9 +14,8 @@ message ConfigRequest {
 
 message ConfigResponse {
     enum ErrorCode {
-        UNSPECIFIED_ERR = 0;
-        GAME_NOT_FOUND_ERR = 1;
+        ErrGameNotFound = 0;
     }
-    ErrorCode errorCode = 1;
+    optional ErrorCode errorCode = 1;
     GameConfig gameConfig = 2;
 }

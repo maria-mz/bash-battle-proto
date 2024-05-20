@@ -13,10 +13,9 @@ message JoinGameRequest {
 
 message JoinGameResponse {
     enum ErrorCode {
-        UNSPECIFIED_ERR = 0;
-        GAME_NOT_FOUND_ERR = 1;
-        INVALID_CODE_ERR = 2;
-        GAME_LOBBY_CLOSED_ERR = 3;
+        ErrGameNotFound = 0;
+        ErrInvalidCode = 1;
+        ErrJoinsClosed = 2;
     }
-    ErrorCode errorCode = 1;
+    optional ErrorCode errorCode = 1;
 }

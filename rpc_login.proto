@@ -11,9 +11,8 @@ message LoginRequest {
 
 message LoginResponse {
     enum ErrorCode {
-        UNSPECIFIED_ERR = 0;
-        NAME_TAKEN_ERR = 1;
+        ErrNameTaken = 0;
     }
-    ErrorCode errorCode = 1;
     string token = 2;
+    optional ErrorCode errorCode = 1;
 }
