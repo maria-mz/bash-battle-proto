@@ -13,6 +13,7 @@ message LoginResponse {
     enum ErrorCode {
         ErrNameTaken = 0;
         ErrGameStarted = 1;
+        ErrGameFull = 2;
     }
     string token = 1;
     repeated Player players = 2;
