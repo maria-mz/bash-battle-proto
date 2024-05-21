@@ -12,6 +12,7 @@ message LoginRequest {
 message LoginResponse {
     enum ErrorCode {
         ErrNameTaken = 0;
+        ErrGameStarted = 1;
     }
     string token = 1;
     repeated Player players = 2;
