@@ -23,11 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BashBattleClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error)
-	GetGameConfig(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error)
-	JoinGame(ctx context.Context, in *JoinGameRequest, opts ...grpc.CallOption) (*JoinGameResponse, error)
-	LeaveGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
-	StreamGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error)
+	Stream(ctx context.Context, opts ...grpc.CallOption) (BashBattle_StreamClient, error)
+	Logout(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*EmptyMsg, error)
 }
 
 type bashBattleClient struct {
@@ -47,72 +44,44 @@ func (c *bashBattleClient) Login(ctx context.Context, in *LoginRequest, opts ...
 	return out, nil
 }
 
-func (c *bashBattleClient) CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error) {
-	out := new(CreateGameResponse)
-	err := c.cc.Invoke(ctx, "/proto.BashBattle/CreateGame", in, out, opts...)
+func (c *bashBattleClient) Stream(ctx context.Context, opts ...grpc.CallOption) (BashBattle_StreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BashBattle_ServiceDesc.Streams[0], "/proto.BashBattle/Stream", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
-}
-
-func (c *bashBattleClient) GetGameConfig(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error) {
-	out := new(ConfigResponse)
-	err := c.cc.Invoke(ctx, "/proto.BashBattle/GetGameConfig", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bashBattleClient) JoinGame(ctx context.Context, in *JoinGameRequest, opts ...grpc.CallOption) (*JoinGameResponse, error) {
-	out := new(JoinGameResponse)
-	err := c.cc.Invoke(ctx, "/proto.BashBattle/JoinGame", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bashBattleClient) LeaveGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error) {
-	out := new(EmptyMessage)
-	err := c.cc.Invoke(ctx, "/proto.BashBattle/LeaveGame", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bashBattleClient) StreamGame(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (BashBattle_StreamGameClient, error) {
-	stream, err := c.cc.NewStream(ctx, &BashBattle_ServiceDesc.Streams[0], "/proto.BashBattle/StreamGame", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &bashBattleStreamGameClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
+	x := &bashBattleStreamClient{stream}
 	return x, nil
 }
 
-type BashBattle_StreamGameClient interface {
-	Recv() (*GameEvent, error)
+type BashBattle_StreamClient interface {
+	Send(*AwkMsg) error
+	Recv() (*Event, error)
 	grpc.ClientStream
 }
 
-type bashBattleStreamGameClient struct {
+type bashBattleStreamClient struct {
 	grpc.ClientStream
 }
 
-func (x *bashBattleStreamGameClient) Recv() (*GameEvent, error) {
-	m := new(GameEvent)
+func (x *bashBattleStreamClient) Send(m *AwkMsg) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *bashBattleStreamClient) Recv() (*Event, error) {
+	m := new(Event)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
+}
+
+func (c *bashBattleClient) Logout(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*EmptyMsg, error) {
+	out := new(EmptyMsg)
+	err := c.cc.Invoke(ctx, "/proto.BashBattle/Logout", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 // BashBattleServer is the server API for BashBattle service.
@@ -120,11 +89,8 @@ func (x *bashBattleStreamGameClient) Recv() (*GameEvent, error) {
 // for forward compatibility
 type BashBattleServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error)
-	GetGameConfig(context.Context, *ConfigRequest) (*ConfigResponse, error)
-	JoinGame(context.Context, *JoinGameRequest) (*JoinGameResponse, error)
-	LeaveGame(context.Context, *EmptyMessage) (*EmptyMessage, error)
-	StreamGame(*EmptyMessage, BashBattle_StreamGameServer) error
+	Stream(BashBattle_StreamServer) error
+	Logout(context.Context, *EmptyMsg) (*EmptyMsg, error)
 	mustEmbedUnimplementedBashBattleServer()
 }
 
@@ -135,20 +101,11 @@ type UnimplementedBashBattleServer struct {
 func (UnimplementedBashBattleServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedBashBattleServer) CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateGame not implemented")
+func (UnimplementedBashBattleServer) Stream(BashBattle_StreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method Stream not implemented")
 }
-func (UnimplementedBashBattleServer) GetGameConfig(context.Context, *ConfigRequest) (*ConfigResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGameConfig not implemented")
-}
-func (UnimplementedBashBattleServer) JoinGame(context.Context, *JoinGameRequest) (*JoinGameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method JoinGame not implemented")
-}
-func (UnimplementedBashBattleServer) LeaveGame(context.Context, *EmptyMessage) (*EmptyMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LeaveGame not implemented")
-}
-func (UnimplementedBashBattleServer) StreamGame(*EmptyMessage, BashBattle_StreamGameServer) error {
-	return status.Errorf(codes.Unimplemented, "method StreamGame not implemented")
+func (UnimplementedBashBattleServer) Logout(context.Context, *EmptyMsg) (*EmptyMsg, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedBashBattleServer) mustEmbedUnimplementedBashBattleServer() {}
 
@@ -181,97 +138,48 @@ func _BashBattle_Login_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BashBattle_CreateGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateGameRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BashBattleServer).CreateGame(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.BashBattle/CreateGame",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BashBattleServer).CreateGame(ctx, req.(*CreateGameRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _BashBattle_Stream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BashBattleServer).Stream(&bashBattleStreamServer{stream})
 }
 
-func _BashBattle_GetGameConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfigRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BashBattleServer).GetGameConfig(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.BashBattle/GetGameConfig",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BashBattleServer).GetGameConfig(ctx, req.(*ConfigRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BashBattle_JoinGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(JoinGameRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BashBattleServer).JoinGame(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.BashBattle/JoinGame",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BashBattleServer).JoinGame(ctx, req.(*JoinGameRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BashBattle_LeaveGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BashBattleServer).LeaveGame(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.BashBattle/LeaveGame",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BashBattleServer).LeaveGame(ctx, req.(*EmptyMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BashBattle_StreamGame_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(EmptyMessage)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(BashBattleServer).StreamGame(m, &bashBattleStreamGameServer{stream})
-}
-
-type BashBattle_StreamGameServer interface {
-	Send(*GameEvent) error
+type BashBattle_StreamServer interface {
+	Send(*Event) error
+	Recv() (*AwkMsg, error)
 	grpc.ServerStream
 }
 
-type bashBattleStreamGameServer struct {
+type bashBattleStreamServer struct {
 	grpc.ServerStream
 }
 
-func (x *bashBattleStreamGameServer) Send(m *GameEvent) error {
+func (x *bashBattleStreamServer) Send(m *Event) error {
 	return x.ServerStream.SendMsg(m)
+}
+
+func (x *bashBattleStreamServer) Recv() (*AwkMsg, error) {
+	m := new(AwkMsg)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _BashBattle_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BashBattleServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.BashBattle/Logout",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BashBattleServer).Logout(ctx, req.(*EmptyMsg))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // BashBattle_ServiceDesc is the grpc.ServiceDesc for BashBattle service.
@@ -286,27 +194,16 @@ var BashBattle_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BashBattle_Login_Handler,
 		},
 		{
-			MethodName: "CreateGame",
-			Handler:    _BashBattle_CreateGame_Handler,
-		},
-		{
-			MethodName: "GetGameConfig",
-			Handler:    _BashBattle_GetGameConfig_Handler,
-		},
-		{
-			MethodName: "JoinGame",
-			Handler:    _BashBattle_JoinGame_Handler,
-		},
-		{
-			MethodName: "LeaveGame",
-			Handler:    _BashBattle_LeaveGame_Handler,
+			MethodName: "Logout",
+			Handler:    _BashBattle_Logout_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "StreamGame",
-			Handler:       _BashBattle_StreamGame_Handler,
+			StreamName:    "Stream",
+			Handler:       _BashBattle_Stream_Handler,
 			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "service.proto",

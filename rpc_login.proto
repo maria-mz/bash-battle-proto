@@ -1,18 +1,19 @@
-// Login RPC Request & Response
-
 syntax = "proto3";
+
+import "game.proto";
 
 package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
 message LoginRequest {
-    string playerName = 1;
+    string username = 1;
 }
 
 message LoginResponse {
     enum ErrorCode {
         ErrNameTaken = 0;
     }
-    string token = 2;
-    optional ErrorCode errorCode = 1;
+    string token = 1;
+    repeated Player players = 2;
+    optional ErrorCode errorCode = 3;
 }

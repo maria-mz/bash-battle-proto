@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "game.proto";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+message PlayerLogin {
+    Player player = 1;
+}
+
+message PlayerLogout {
+    Player player = 2;
+}
+
+message RoundPrep {
+    int32 roundNumber = 1;
+    string question = 2;
+    bytes inputFile = 3;
+    bytes outputFile = 4; 
+}
+
+message RoundStart {
+    google.protobuf.Timestamp startTime = 1;
+}
+
+message RoundOver {
+    int32 roundNumber = 1;
+    repeated Player players = 2;
+}
+
+message GameOver {
+    repeated Player players = 2;
+}
+
+message StateChange {
+    GameState state = 1;
+}
+
+message Event {
+    oneof event {
+        PlayerLogin playerLogin = 1;
+        PlayerLogout playerLogout = 2;
+        RoundPrep roundPrep = 3;
+        RoundStart roundStart = 4;
+        RoundOver roundOver = 5;
+        GameOver gameOver = 6;
+        StateChange stateChange = 7;
+    } 
+}

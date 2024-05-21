@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+message RoundPrepDone {}
+
+message AwkMsg {
+    oneof awk {
+        RoundPrepDone prepDone = 3;
+    } 
+}

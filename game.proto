@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/maria-mz/bash-battle/proto";
+
+enum GameState {
+    Lobby = 0;
+    InProgress = 1;
+    Cancelled = 2;
+    Done = 3;
+}
+
+enum Difficulty {
+    VariedDiff = 0;
+    EasyDiff = 1;
+    MediumDiff = 2;
+    HardDiff = 3;
+}
+
+enum FileSize {
+    VariedSize = 0;
+    SmallSize = 1;
+    MediumSize = 2;
+    LargeSize = 3;
+}
+
+message Config {
+    int32 maxPlayers = 1;
+    int32 rounds = 2;
+    int32 roundSeconds = 3;
+    Difficulty difficulty = 4;
+    FileSize fileSize = 5;
+}
+
+message RoundStats {
+    bool won = 1;
+    string command = 2;
+}
+
+message GameStats {
+    map<int32, RoundStats> roundStats = 1;
+    int32 score = 2;
+}
+
+message Player {
+    string username = 1;
+    GameStats stats = 2;
+}
