@@ -16,6 +16,7 @@ message LoginResponse {
         ErrGameFull = 2;
     }
     string token = 1;
-    repeated Player players = 2;
-    optional ErrorCode errorCode = 3;
+    GameConfig gameConfig = 2;
+    repeated Player players = 3;
+    optional ErrorCode errorCode = 4;
 }

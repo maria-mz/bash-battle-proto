@@ -24,7 +24,7 @@ enum FileSize {
     LargeSize = 3;
 }
 
-message Config {
+message GameConfig {
     int32 maxPlayers = 1;
     int32 rounds = 2;
     int32 roundSeconds = 3;
