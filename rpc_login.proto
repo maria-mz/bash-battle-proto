@@ -10,13 +10,8 @@ message LoginRequest {
 }
 
 message LoginResponse {
-    enum ErrorCode {
-        ErrNameTaken = 0;
-        ErrGameStarted = 1;
-        ErrGameFull = 2;
-    }
     string token = 1;
     GameConfig gameConfig = 2;
     repeated Player players = 3;
-    optional ErrorCode errorCode = 4;
+    optional string error = 4;
 }
