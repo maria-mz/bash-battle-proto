@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BashBattleClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	GetGameConfig(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*GameConfig, error)
+	GetPlayers(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*Players, error)
 	Stream(ctx context.Context, opts ...grpc.CallOption) (BashBattle_StreamClient, error)
 	Logout(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*EmptyMsg, error)
 }
@@ -38,6 +40,24 @@ func NewBashBattleClient(cc grpc.ClientConnInterface) BashBattleClient {
 func (c *bashBattleClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, "/proto.BashBattle/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bashBattleClient) GetGameConfig(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*GameConfig, error) {
+	out := new(GameConfig)
+	err := c.cc.Invoke(ctx, "/proto.BashBattle/GetGameConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bashBattleClient) GetPlayers(ctx context.Context, in *EmptyMsg, opts ...grpc.CallOption) (*Players, error) {
+	out := new(Players)
+	err := c.cc.Invoke(ctx, "/proto.BashBattle/GetPlayers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,6 +109,8 @@ func (c *bashBattleClient) Logout(ctx context.Context, in *EmptyMsg, opts ...grp
 // for forward compatibility
 type BashBattleServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	GetGameConfig(context.Context, *EmptyMsg) (*GameConfig, error)
+	GetPlayers(context.Context, *EmptyMsg) (*Players, error)
 	Stream(BashBattle_StreamServer) error
 	Logout(context.Context, *EmptyMsg) (*EmptyMsg, error)
 	mustEmbedUnimplementedBashBattleServer()
@@ -100,6 +122,12 @@ type UnimplementedBashBattleServer struct {
 
 func (UnimplementedBashBattleServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedBashBattleServer) GetGameConfig(context.Context, *EmptyMsg) (*GameConfig, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGameConfig not implemented")
+}
+func (UnimplementedBashBattleServer) GetPlayers(context.Context, *EmptyMsg) (*Players, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPlayers not implemented")
 }
 func (UnimplementedBashBattleServer) Stream(BashBattle_StreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method Stream not implemented")
@@ -134,6 +162,42 @@ func _BashBattle_Login_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BashBattleServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BashBattle_GetGameConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BashBattleServer).GetGameConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.BashBattle/GetGameConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BashBattleServer).GetGameConfig(ctx, req.(*EmptyMsg))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BashBattle_GetPlayers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMsg)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BashBattleServer).GetPlayers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.BashBattle/GetPlayers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BashBattleServer).GetPlayers(ctx, req.(*EmptyMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,6 +256,14 @@ var BashBattle_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _BashBattle_Login_Handler,
+		},
+		{
+			MethodName: "GetGameConfig",
+			Handler:    _BashBattle_GetGameConfig_Handler,
+		},
+		{
+			MethodName: "GetPlayers",
+			Handler:    _BashBattle_GetPlayers_Handler,
 		},
 		{
 			MethodName: "Logout",

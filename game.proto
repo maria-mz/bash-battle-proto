@@ -30,6 +30,7 @@ message GameConfig {
     int32 roundSeconds = 3;
     Difficulty difficulty = 4;
     FileSize fileSize = 5;
+    int32 countdownSeconds = 6;
 }
 
 message RoundStats {
@@ -45,4 +46,8 @@ message GameStats {
 message Player {
     string username = 1;
     GameStats stats = 2;
+}
+
+message Players {
+    repeated Player players = 1;
 }

@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "game.proto";
 import "rpc_login.proto";
 import "rpc_client_stream.proto";
 import "rpc_server_stream.proto";
@@ -9,6 +10,8 @@ option go_package = "github.com/maria-mz/bash-battle/proto";
 
 service BashBattle {
     rpc Login (LoginRequest) returns (LoginResponse) {}
+    rpc GetGameConfig (EmptyMsg) returns (GameConfig) {}
+    rpc GetPlayers (EmptyMsg) returns (Players) {}
     rpc Stream (stream AwkMsg) returns (stream Event) {}
     rpc Logout (EmptyMsg) returns (EmptyMsg) {}
 }
