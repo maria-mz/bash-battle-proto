@@ -1,7 +1,8 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 import "game.proto";
-import "rpc_login.proto";
+import "rpc_connect.proto";
 import "rpc_client_stream.proto";
 import "rpc_server_stream.proto";
 
@@ -9,11 +10,11 @@ package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
 service BashBattle {
-    rpc Login (LoginRequest) returns (LoginResponse) {}
-    rpc GetGameConfig (EmptyMsg) returns (GameConfig) {}
-    rpc GetPlayers (EmptyMsg) returns (Players) {}
+    rpc Connect (ConnectRequest) returns (ConnectResponse) {}
+    rpc JoinGame (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+    rpc GetGameConfig (google.protobuf.Empty) returns (GameConfig) {}
+    rpc GetPlayers (google.protobuf.Empty) returns (Players) {}
     rpc Stream (stream AwkMsg) returns (stream Event) {}
-    rpc Logout (EmptyMsg) returns (EmptyMsg) {}
+    rpc LeaveGame (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+    rpc Disconnect (google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
-
-message EmptyMsg {}
