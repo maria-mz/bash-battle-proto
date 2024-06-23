@@ -20,14 +20,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type RoundPrepDone struct {
+type RoundLoaded struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *RoundPrepDone) Reset() {
-	*x = RoundPrepDone{}
+func (x *RoundLoaded) Reset() {
+	*x = RoundLoaded{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_rpc_client_stream_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -35,13 +35,13 @@ func (x *RoundPrepDone) Reset() {
 	}
 }
 
-func (x *RoundPrepDone) String() string {
+func (x *RoundLoaded) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RoundPrepDone) ProtoMessage() {}
+func (*RoundLoaded) ProtoMessage() {}
 
-func (x *RoundPrepDone) ProtoReflect() protoreflect.Message {
+func (x *RoundLoaded) ProtoReflect() protoreflect.Message {
 	mi := &file_rpc_client_stream_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,24 +53,21 @@ func (x *RoundPrepDone) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RoundPrepDone.ProtoReflect.Descriptor instead.
-func (*RoundPrepDone) Descriptor() ([]byte, []int) {
+// Deprecated: Use RoundLoaded.ProtoReflect.Descriptor instead.
+func (*RoundLoaded) Descriptor() ([]byte, []int) {
 	return file_rpc_client_stream_proto_rawDescGZIP(), []int{0}
 }
 
-type AwkMsg struct {
+type RoundSubmission struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Types that are assignable to Awk:
-	//
-	//	*AwkMsg_PrepDone
-	Awk isAwkMsg_Awk `protobuf_oneof:"awk"`
+	RoundStats *RoundStats `protobuf:"bytes,1,opt,name=roundStats,proto3" json:"roundStats,omitempty"`
 }
 
-func (x *AwkMsg) Reset() {
-	*x = AwkMsg{}
+func (x *RoundSubmission) Reset() {
+	*x = RoundSubmission{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_rpc_client_stream_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -78,13 +75,13 @@ func (x *AwkMsg) Reset() {
 	}
 }
 
-func (x *AwkMsg) String() string {
+func (x *RoundSubmission) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AwkMsg) ProtoMessage() {}
+func (*RoundSubmission) ProtoMessage() {}
 
-func (x *AwkMsg) ProtoReflect() protoreflect.Message {
+func (x *RoundSubmission) ProtoReflect() protoreflect.Message {
 	mi := &file_rpc_client_stream_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -96,49 +93,122 @@ func (x *AwkMsg) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AwkMsg.ProtoReflect.Descriptor instead.
-func (*AwkMsg) Descriptor() ([]byte, []int) {
+// Deprecated: Use RoundSubmission.ProtoReflect.Descriptor instead.
+func (*RoundSubmission) Descriptor() ([]byte, []int) {
 	return file_rpc_client_stream_proto_rawDescGZIP(), []int{1}
 }
 
-func (m *AwkMsg) GetAwk() isAwkMsg_Awk {
+func (x *RoundSubmission) GetRoundStats() *RoundStats {
+	if x != nil {
+		return x.RoundStats
+	}
+	return nil
+}
+
+type AckMsg struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Ack:
+	//
+	//	*AckMsg_RoundLoaded
+	//	*AckMsg_RoundSubmission
+	Ack isAckMsg_Ack `protobuf_oneof:"ack"`
+}
+
+func (x *AckMsg) Reset() {
+	*x = AckMsg{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_rpc_client_stream_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AckMsg) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AckMsg) ProtoMessage() {}
+
+func (x *AckMsg) ProtoReflect() protoreflect.Message {
+	mi := &file_rpc_client_stream_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AckMsg.ProtoReflect.Descriptor instead.
+func (*AckMsg) Descriptor() ([]byte, []int) {
+	return file_rpc_client_stream_proto_rawDescGZIP(), []int{2}
+}
+
+func (m *AckMsg) GetAck() isAckMsg_Ack {
 	if m != nil {
-		return m.Awk
+		return m.Ack
 	}
 	return nil
 }
 
-func (x *AwkMsg) GetPrepDone() *RoundPrepDone {
-	if x, ok := x.GetAwk().(*AwkMsg_PrepDone); ok {
-		return x.PrepDone
+func (x *AckMsg) GetRoundLoaded() *RoundLoaded {
+	if x, ok := x.GetAck().(*AckMsg_RoundLoaded); ok {
+		return x.RoundLoaded
 	}
 	return nil
 }
 
-type isAwkMsg_Awk interface {
-	isAwkMsg_Awk()
+func (x *AckMsg) GetRoundSubmission() *RoundSubmission {
+	if x, ok := x.GetAck().(*AckMsg_RoundSubmission); ok {
+		return x.RoundSubmission
+	}
+	return nil
 }
 
-type AwkMsg_PrepDone struct {
-	PrepDone *RoundPrepDone `protobuf:"bytes,3,opt,name=prepDone,proto3,oneof"`
+type isAckMsg_Ack interface {
+	isAckMsg_Ack()
 }
 
-func (*AwkMsg_PrepDone) isAwkMsg_Awk() {}
+type AckMsg_RoundLoaded struct {
+	RoundLoaded *RoundLoaded `protobuf:"bytes,1,opt,name=roundLoaded,proto3,oneof"`
+}
+
+type AckMsg_RoundSubmission struct {
+	RoundSubmission *RoundSubmission `protobuf:"bytes,2,opt,name=roundSubmission,proto3,oneof"`
+}
+
+func (*AckMsg_RoundLoaded) isAckMsg_Ack() {}
+
+func (*AckMsg_RoundSubmission) isAckMsg_Ack() {}
 
 var File_rpc_client_stream_proto protoreflect.FileDescriptor
 
 var file_rpc_client_stream_proto_rawDesc = []byte{
 	0x0a, 0x17, 0x72, 0x70, 0x63, 0x5f, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x5f, 0x73, 0x74, 0x72,
 	0x65, 0x61, 0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0x0f, 0x0a, 0x0d, 0x52, 0x6f, 0x75, 0x6e, 0x64, 0x50, 0x72, 0x65, 0x70, 0x44, 0x6f, 0x6e,
-	0x65, 0x22, 0x43, 0x0a, 0x06, 0x41, 0x77, 0x6b, 0x4d, 0x73, 0x67, 0x12, 0x32, 0x0a, 0x08, 0x70,
-	0x72, 0x65, 0x70, 0x44, 0x6f, 0x6e, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x6f, 0x75, 0x6e, 0x64, 0x50, 0x72, 0x65, 0x70, 0x44,
-	0x6f, 0x6e, 0x65, 0x48, 0x00, 0x52, 0x08, 0x70, 0x72, 0x65, 0x70, 0x44, 0x6f, 0x6e, 0x65, 0x42,
-	0x05, 0x0a, 0x03, 0x61, 0x77, 0x6b, 0x42, 0x27, 0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
-	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x61, 0x72, 0x69, 0x61, 0x2d, 0x6d, 0x7a, 0x2f, 0x62, 0x61,
-	0x73, 0x68, 0x2d, 0x62, 0x61, 0x74, 0x74, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x1a, 0x0a, 0x67, 0x61, 0x6d, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x0d, 0x0a, 0x0b,
+	0x52, 0x6f, 0x75, 0x6e, 0x64, 0x4c, 0x6f, 0x61, 0x64, 0x65, 0x64, 0x22, 0x44, 0x0a, 0x0f, 0x52,
+	0x6f, 0x75, 0x6e, 0x64, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x31,
+	0x0a, 0x0a, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x74, 0x61, 0x74, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x6f, 0x75, 0x6e, 0x64,
+	0x53, 0x74, 0x61, 0x74, 0x73, 0x52, 0x0a, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x74, 0x61, 0x74,
+	0x73, 0x22, 0x8b, 0x01, 0x0a, 0x06, 0x41, 0x63, 0x6b, 0x4d, 0x73, 0x67, 0x12, 0x36, 0x0a, 0x0b,
+	0x72, 0x6f, 0x75, 0x6e, 0x64, 0x4c, 0x6f, 0x61, 0x64, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x6f, 0x75, 0x6e, 0x64, 0x4c,
+	0x6f, 0x61, 0x64, 0x65, 0x64, 0x48, 0x00, 0x52, 0x0b, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x4c, 0x6f,
+	0x61, 0x64, 0x65, 0x64, 0x12, 0x42, 0x0a, 0x0f, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x75, 0x62,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x75, 0x62, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0f, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x75,
+	0x62, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x05, 0x0a, 0x03, 0x61, 0x63, 0x6b, 0x42,
+	0x27, 0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x61,
+	0x72, 0x69, 0x61, 0x2d, 0x6d, 0x7a, 0x2f, 0x62, 0x61, 0x73, 0x68, 0x2d, 0x62, 0x61, 0x74, 0x74,
+	0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -153,18 +223,22 @@ func file_rpc_client_stream_proto_rawDescGZIP() []byte {
 	return file_rpc_client_stream_proto_rawDescData
 }
 
-var file_rpc_client_stream_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_rpc_client_stream_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_rpc_client_stream_proto_goTypes = []interface{}{
-	(*RoundPrepDone)(nil), // 0: proto.RoundPrepDone
-	(*AwkMsg)(nil),        // 1: proto.AwkMsg
+	(*RoundLoaded)(nil),     // 0: proto.RoundLoaded
+	(*RoundSubmission)(nil), // 1: proto.RoundSubmission
+	(*AckMsg)(nil),          // 2: proto.AckMsg
+	(*RoundStats)(nil),      // 3: proto.RoundStats
 }
 var file_rpc_client_stream_proto_depIdxs = []int32{
-	0, // 0: proto.AwkMsg.prepDone:type_name -> proto.RoundPrepDone
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	3, // 0: proto.RoundSubmission.roundStats:type_name -> proto.RoundStats
+	0, // 1: proto.AckMsg.roundLoaded:type_name -> proto.RoundLoaded
+	1, // 2: proto.AckMsg.roundSubmission:type_name -> proto.RoundSubmission
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_rpc_client_stream_proto_init() }
@@ -172,9 +246,10 @@ func file_rpc_client_stream_proto_init() {
 	if File_rpc_client_stream_proto != nil {
 		return
 	}
+	file_game_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_rpc_client_stream_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RoundPrepDone); i {
+			switch v := v.(*RoundLoaded); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -186,7 +261,19 @@ func file_rpc_client_stream_proto_init() {
 			}
 		}
 		file_rpc_client_stream_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AwkMsg); i {
+			switch v := v.(*RoundSubmission); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_rpc_client_stream_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AckMsg); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -198,8 +285,9 @@ func file_rpc_client_stream_proto_init() {
 			}
 		}
 	}
-	file_rpc_client_stream_proto_msgTypes[1].OneofWrappers = []interface{}{
-		(*AwkMsg_PrepDone)(nil),
+	file_rpc_client_stream_proto_msgTypes[2].OneofWrappers = []interface{}{
+		(*AckMsg_RoundLoaded)(nil),
+		(*AckMsg_RoundSubmission)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -207,7 +295,7 @@ func file_rpc_client_stream_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_rpc_client_stream_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -3,13 +3,6 @@ syntax = "proto3";
 package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
-enum GameState {
-    Lobby = 0;
-    InProgress = 1;
-    Cancelled = 2;
-    Done = 3;
-}
-
 enum Difficulty {
     VariedDiff = 0;
     EasyDiff = 1;

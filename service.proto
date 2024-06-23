@@ -14,7 +14,7 @@ service BashBattle {
     rpc JoinGame (google.protobuf.Empty) returns (google.protobuf.Empty) {}
     rpc GetGameConfig (google.protobuf.Empty) returns (GameConfig) {}
     rpc GetPlayers (google.protobuf.Empty) returns (Players) {}
-    rpc Stream (stream AwkMsg) returns (stream Event) {}
+    rpc Stream (stream AckMsg) returns (stream Event) {}
     rpc LeaveGame (google.protobuf.Empty) returns (google.protobuf.Empty) {}
     rpc Disconnect (google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }

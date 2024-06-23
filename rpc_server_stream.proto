@@ -6,47 +6,48 @@ import "game.proto";
 package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
-message PlayerLogin {
+// TODO: Some of these are more like commands instead of events.
+// break up ?
+
+message PlayerJoined {
     Player player = 1;
 }
 
-message PlayerLogout {
+message PlayerLeft {
     Player player = 2;
 }
 
-message RoundPrep {
+message LoadRound {
     int32 roundNumber = 1;
     string question = 2;
     bytes inputFile = 3;
     bytes outputFile = 4; 
 }
 
-message RoundStart {
+message CountingDown {
     int32 roundNumber = 1;
-    google.protobuf.Timestamp startTime = 2;
+    google.protobuf.Timestamp startsAt = 2;
 }
 
-message RoundOver {
+message RoundStarted {
     int32 roundNumber = 1;
-    repeated Player players = 2;
+    google.protobuf.Timestamp endsAt = 2;
 }
 
-message GameOver {
-    repeated Player players = 2;
+message SubmitRoundScore {
+    int32 roundNumber = 1;
 }
 
-message StateChange {
-    GameState state = 1;
-}
+message GameOver {}
 
 message Event {
     oneof event {
-        PlayerLogin playerLogin = 1;
-        PlayerLogout playerLogout = 2;
-        RoundPrep roundPrep = 3;
-        RoundStart roundStart = 4;
-        RoundOver roundOver = 5;
-        GameOver gameOver = 6;
-        StateChange stateChange = 7;
+        PlayerJoined playerJoined = 1;
+        PlayerLeft playerLeft = 2;
+        LoadRound loadRound = 3;
+        CountingDown countingDown = 4;
+        RoundStarted roundStarted = 5;
+        SubmitRoundScore submitRoundScore = 6;
+        GameOver gameOver = 7;
     } 
 }

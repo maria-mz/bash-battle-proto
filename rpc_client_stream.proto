@@ -1,12 +1,19 @@
 syntax = "proto3";
 
+import "game.proto";
+
 package proto;
 option go_package = "github.com/maria-mz/bash-battle/proto";
 
-message RoundPrepDone {}
+message RoundLoaded {}
 
-message AwkMsg {
-    oneof awk {
-        RoundPrepDone prepDone = 3;
+message RoundSubmission {
+    RoundStats roundStats = 1;
+}
+
+message AckMsg {
+    oneof ack {
+        RoundLoaded roundLoaded = 1;
+        RoundSubmission roundSubmission = 2;
     } 
 }

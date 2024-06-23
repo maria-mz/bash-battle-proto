@@ -86,7 +86,7 @@ func (c *bashBattleClient) Stream(ctx context.Context, opts ...grpc.CallOption) 
 }
 
 type BashBattle_StreamClient interface {
-	Send(*AwkMsg) error
+	Send(*AckMsg) error
 	Recv() (*Event, error)
 	grpc.ClientStream
 }
@@ -95,7 +95,7 @@ type bashBattleStreamClient struct {
 	grpc.ClientStream
 }
 
-func (x *bashBattleStreamClient) Send(m *AwkMsg) error {
+func (x *bashBattleStreamClient) Send(m *AckMsg) error {
 	return x.ClientStream.SendMsg(m)
 }
 
@@ -255,7 +255,7 @@ func _BashBattle_Stream_Handler(srv interface{}, stream grpc.ServerStream) error
 
 type BashBattle_StreamServer interface {
 	Send(*Event) error
-	Recv() (*AwkMsg, error)
+	Recv() (*AckMsg, error)
 	grpc.ServerStream
 }
 
@@ -267,8 +267,8 @@ func (x *bashBattleStreamServer) Send(m *Event) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *bashBattleStreamServer) Recv() (*AwkMsg, error) {
-	m := new(AwkMsg)
+func (x *bashBattleStreamServer) Recv() (*AckMsg, error) {
+	m := new(AckMsg)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
